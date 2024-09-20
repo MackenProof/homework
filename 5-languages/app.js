@@ -1,5 +1,5 @@
 const userLang = prompt('Select language: en, ru, de, fr ');
-switch(userLang) {
+switch(userLang.toLowerCase()) {
     case 'en':
         console.log('Hello!');
         break;
