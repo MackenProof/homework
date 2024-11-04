@@ -1,44 +1,24 @@
-function crypto (pass) {
-    const dataPass = pass.split('');
-    if(dataPass.length >= 5) {          // проверка на длину пароля
-        dataPass.reverse();
-        // console.log(dataPass);
-        let el1 = dataPass[2];
-        dataPass[2] = dataPass[4];
-        dataPass[4] = el1;
-        // console.log(dataPass);
-        let el2 = dataPass[3];
-        dataPass[3] = dataPass[1];
-        dataPass[1] = el2;
-        // console.log(dataPass);
-        let el3 = dataPass[0];
-        dataPass[0] = dataPass[dataPass.length -1];
-        dataPass[dataPass.length -1] = el3;
-        // console.log(dataPass);
+function cryptoPass (data) {
+    const dataPass = data.split('');
+    const averageIndexDataPass = Math.floor(dataPass.length / 2);
+    const firstDataPass = dataPass.slice(0, averageIndexDataPass);
+    const secondDataPass = dataPass.slice(averageIndexDataPass);
 
-        return dataPass;
-    }
-    
+    [firstDataPass[0], secondDataPass[Math.floor(secondDataPass.length / 2)], firstDataPass[Math.floor(firstDataPass.length / 2)], secondDataPass[2], firstDataPass[firstDataPass.length -2], secondDataPass[secondDataPass.length -2]] = [secondDataPass[Math.floor(secondDataPass.length / 2)], firstDataPass[0], secondDataPass[2], firstDataPass[Math.floor(firstDataPass.length / 2)], secondDataPass[secondDataPass.length -2], firstDataPass[firstDataPass.length -2]];
+
+    const newDataPass = firstDataPass.concat(secondDataPass).join('');
+    return newDataPass;
 };
-const dataPassCrypto = crypto('Pavel');
-function checkPass(passCheck) {
-    if(passCheck.length >= 5) { 
-        let el1 = dataPassCrypto[0];
-        dataPassCrypto[0] = dataPassCrypto[dataPassCrypto.length -1];
-        dataPassCrypto[dataPassCrypto.length -1] = el1;
-        
-        let el2 = dataPassCrypto[3];
-        dataPassCrypto[3] = dataPassCrypto[1];
-        dataPassCrypto[1] = el2;
 
-        let el3 = dataPassCrypto[2];
-        dataPassCrypto[2] = dataPassCrypto[4];
-        dataPassCrypto[4] = el3;
+const password = 'MyOriginalPassword';
+const encryptedPassword = cryptoPass(password);
+const decryptedPassword = cryptoPass(encryptedPassword);
 
-        const dataPassUnCrypto = dataPassCrypto.reverse().join('');
-
-        dataPassUnCrypto === passCheck ? console.log(true) : console.log(false);
+function checkPassword (originalPassword) {
+    if (!encryptedPassword || !originalPassword) {
+        return false;
     }
-    
-}
-checkPass('Pavel');
+    return originalPassword === decryptedPassword;
+};
+
+console.log(password, '-',encryptedPassword, '-', decryptedPassword, '-',checkPassword(password));
